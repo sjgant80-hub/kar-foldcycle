@@ -1,5 +1,7 @@
 # kar-foldcycle
 
+**▶ Live:** https://sjgant80-hub.github.io/kar-foldcycle/
+
 **The fold-cycle, mechanism 1 — recycling a cached prompt prefix instead of recomputing it cut prefill
 latency ~95% on a local model. Measured on real timings, with a deterministic verdict and the honest wall kept.**
 
