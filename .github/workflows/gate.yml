@@ -8,23 +8,28 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
 
-      - name: the verdict kernel against its falsifiable tests
-        run: node --test foldcycle.test.mjs
+      - name: both verdict kernels against their falsifiable tests
+        run: node --test
 
       # ⚑ Pinned. An unpinned gate is a gate somebody else can change.
-      - name: witness — try to break the tests (must be CLEAN)
+      - name: witness — mechanism 1 kernel must be CLEAN
         run: |
           git clone --depth 1 --branch v0.6 https://github.com/sjgant80-hub/witness.git /tmp/witness
           node /tmp/witness/witness.mjs mutate foldcycle.mjs \
-            --timeout 60000 --cap 900 \
-            --baseline foldcycle.baseline.json \
+            --timeout 60000 --cap 900 --baseline foldcycle.baseline.json \
             --test node --test foldcycle.test.mjs
 
-      - name: the live page still carries the gated kernel + recorded data
+      - name: witness — mechanism 2 kernel must be CLEAN
+        run: |
+          node /tmp/witness/witness.mjs mutate capacitypool.mjs \
+            --timeout 60000 --cap 900 --baseline capacitypool.baseline.json \
+            --test node --test capacitypool.test.mjs
+
+      - name: the live page still carries the gated kernels + recorded data
         run: |
           cp index.html /tmp/shipped.html
           node build-page.mjs
           diff -q /tmp/shipped.html index.html || {
-            echo "::error::index.html has drifted from foldcycle.mjs/results.json — run node build-page.mjs and commit."
+            echo "::error::index.html has drifted from the kernels/results — run node build-page.mjs and commit."
             exit 1
           }

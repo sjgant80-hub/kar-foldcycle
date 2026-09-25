@@ -1,30 +1,29 @@
 # kar-foldcycle
 
-> The fold-cycle, mechanism 1 (KV-cache / prefix recycling): recycling a cached prompt prefix instead of
-> recomputing it cut prefill latency ~95% on a local model. A deterministic verdict kernel (no LLM judge)
-> plus a measurement harness, built by Kar of the FallForge estate. MIT-licensed, runs in the browser and
-> in Node.
+> The fold-cycle: recycling held compute-state instead of recomputing it, measured on real local models.
+> Deterministic verdict kernels (no LLM judge), built by Kar of the FallForge estate. MIT-licensed.
 
-## What it measures
-- Prefill latency (`prompt_eval_duration`) of recomputing a ~400-token prompt prefix COLD versus recycling
-  it WARM from the model's KV-cache, on a real local model via Ollama.
-- Prefill latency is an honest proxy for prefill energy: fewer recomputed FLOPs = less time = fewer joules.
-  It is NOT a lab wattmeter reading.
+## Mechanism 1 — prefix recycling (the proven seed)
+- Reuse a prompt's cached KV-state instead of recomputing the prefill.
+- Result: cold ~4392 ms → warm ~240 ms = ~95% prefill-latency cut on llama3.2:1b. Control (unrelated
+  queries) got no saving. Metric = real Ollama prompt_eval_duration (proxy for prefill energy, not a wattmeter).
+- Honest: prefix caching is the proven seed (Ollama does it by default); this quantifies the magnitude.
 
-## The result
-- On llama3.2:1b (CPU-bound): cold ~4392 ms → warm ~240 ms = ~95% prefill-latency cut.
-- A control of unrelated queries (no shared prefix) got no saving — the effect requires overlap.
+## Mechanism 2 — capacity-pooling (the novel step)
+- When a memory fold expires (the strand decides 'expire'), release its computed embedding to a content-keyed
+  pool; reuse it when the content recurs instead of recomputing an expensive embedding-model call.
+- Result: ~67% of real nomic-embed-text calls avoided (45 → 15) and ~67% embed time saved on a recurring
+  workload. Control (all-unique content) got no saving — the effect requires recurrence.
+- Honest: the novelty is releasing an EXPIRED fold's capacity back into the cycle; the win holds because the
+  recycled computation is a real, expensive embedding.
 
-## The honest wall
-- Prefix caching is the proven seed (Ollama does it by default). This QUANTIFIES the magnitude on this metal;
-  it does not invent the mechanism.
-- The fold-cycle's novel generalizations (a systematic pool across a whole query-stream, capacity-pooling in
-  a memory-mind on expiry, a balance condition) are NOT yet built or tested. This is mechanism 1, measured.
+## Not yet built
+- Mechanism 3 — the balance condition that keeps the pool full across a live query-stream.
 
 ## Key files
-- foldcycle.mjs — the deterministic verdict kernel (WIN / LEARN / UNMEASURED / SUSPECT), mutation-gated by witness.
-- run-eval.mjs — the measurement harness (hits local Ollama, writes results.json).
-- results.json — the recorded samples the page renders.
+- foldcycle.mjs / capacitypool.mjs — the two deterministic verdict kernels (WIN/LEARN/UNMEASURED/SUSPECT),
+  both mutation-gated by witness.
+- run-eval.mjs / run-mech2.mjs — the measurement harnesses (hit local Ollama; write results.json / results-mech2.json).
 
 ## Links
 - Repository: https://github.com/sjgant80-hub/kar-foldcycle

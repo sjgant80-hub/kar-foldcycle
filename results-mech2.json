@@ -1,0 +1,55 @@
+{
+  "what": "fold-cycle mechanism 2 — capacity-pooling: release an expired fold's embedding to a pool, reuse it when content recurs, instead of recomputing. Measures embedding calls avoided + time saved on a recurring workload.",
+  "metric": "real embedding-model calls (nomic-embed-text) avoided, and their wall time — the recycled computation is a genuine model forward pass.",
+  "embedModel": "nomic-embed-text",
+  "workingSet": 15,
+  "passes": 3,
+  "recurring": {
+    "off": {
+      "calls": 45,
+      "ms": 1819
+    },
+    "on": {
+      "calls": 15,
+      "ms": 606,
+      "stats": {
+        "size": 15,
+        "releases": 45,
+        "allocations": 45,
+        "hits": 30,
+        "misses": 15,
+        "cap": 10000
+      }
+    }
+  },
+  "control": {
+    "off": {
+      "calls": 45,
+      "ms": 2316
+    },
+    "on": {
+      "calls": 45,
+      "ms": 2244,
+      "stats": {
+        "size": 45,
+        "releases": 45,
+        "allocations": 45,
+        "hits": 0,
+        "misses": 45,
+        "cap": 10000
+      }
+    }
+  },
+  "verdict": {
+    "verdict": "WIN",
+    "why": "recycling released capacity avoided 67% of embedding calls (45 -> 15), 67% of embed time on the recurring workload",
+    "callsOff": 45,
+    "callsOn": 15,
+    "callsSavedPct": 67,
+    "timeSavedPct": 67,
+    "thresholdPct": 20,
+    "controlSavedPct": 0,
+    "controlHolds": true
+  },
+  "honest": "The novelty is releasing an EXPIRED fold's capacity back into the cycle (strand 'expire' → pool → reuse), keyed to si-didy/strand.mjs's exact decision. Content-keyed caching in general is not novel; the honest test is whether recycling nets when the recomputed embedding is a real, expensive model call — and the control (all-unique) proves it needs recurrence."
+}
