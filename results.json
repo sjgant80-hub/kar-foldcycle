@@ -1,0 +1,74 @@
+{
+  "what": "fold-cycle mechanism 1 — KV-cache/prefix recycling: prefill latency of recomputing a prefix COLD vs recycling it WARM, on a real local model.",
+  "metric": "prompt_eval_duration (prefill latency, ms) — an honest proxy for prefill energy (FLOPs ∝ time ∝ joules); NOT a wattmeter.",
+  "model": "llama3.2:1b",
+  "host": "http://localhost:11434",
+  "trials": 3,
+  "samples": {
+    "cold": [
+      4774,
+      4276,
+      4392
+    ],
+    "warm": [
+      247,
+      256,
+      231,
+      240,
+      235,
+      239
+    ],
+    "control": [
+      4409,
+      4270,
+      4948
+    ]
+  },
+  "perTrial": [
+    {
+      "trial": 0,
+      "tokens": 395,
+      "coldMs": 4774,
+      "warmMs": [
+        247,
+        256
+      ],
+      "controlMs": 4409
+    },
+    {
+      "trial": 1,
+      "tokens": 383,
+      "coldMs": 4276,
+      "warmMs": [
+        231,
+        240
+      ],
+      "controlMs": 4270
+    },
+    {
+      "trial": 2,
+      "tokens": 388,
+      "coldMs": 4392,
+      "warmMs": [
+        235,
+        239
+      ],
+      "controlMs": 4948
+    }
+  ],
+  "verdict": {
+    "verdict": "WIN",
+    "why": "recycling the cached prefix cut prefill latency 95% (4392ms cold -> 239.5ms warm) — the saving is the recomputed prefill avoided",
+    "coldMedian": 4392,
+    "warmMedian": 239.5,
+    "savingMs": 4152.5,
+    "savingPct": 95,
+    "nCold": 3,
+    "nWarm": 6,
+    "thresholdPct": 20,
+    "controlMedian": 4409,
+    "controlSavingPct": 0,
+    "controlHolds": true
+  },
+  "honest": "Prefix caching is the PROVEN seed (Ollama does it by default) — this quantifies the magnitude on this metal, it does not invent the mechanism. Mechanisms 2 (capacity-pooling) and 3 (κ-balance) are unbuilt."
+}
