@@ -17,13 +17,18 @@
 - Honest: the novelty is releasing an EXPIRED fold's capacity back into the cycle; the win holds because the
   recycled computation is a real, expensive embedding.
 
-## Not yet built
-- Mechanism 3 — the balance condition that keeps the pool full across a live query-stream.
+## Mechanism 3 — the balance condition (the honest learn)
+- A self-tuning pool that grows retention when it evicts something that recurs and shrinks when it doesn't,
+  to keep the pool "full enough" across a shifting working set (the idea that would make it a self-powering cycle).
+- Result: LEARN. Under a working set shifting 10 → 45 → 10, the adaptive pool (79% hit-rate, avg-mem 33)
+  roughly matched a large fixed cap (82%, avg-mem 37) but saved only ~11% memory — not enough to beat just
+  picking a fixed cap. Deterministic pool-policy simulation (no model). Predicted, and reported, as a learn.
 
 ## Key files
-- foldcycle.mjs / capacitypool.mjs — the two deterministic verdict kernels (WIN/LEARN/UNMEASURED/SUSPECT),
-  both mutation-gated by witness.
-- run-eval.mjs / run-mech2.mjs — the measurement harnesses (hit local Ollama; write results.json / results-mech2.json).
+- foldcycle.mjs / capacitypool.mjs / balancer.mjs — three deterministic verdict kernels
+  (WIN/LEARN/UNMEASURED/SUSPECT), all mutation-gated by witness.
+- run-eval.mjs / run-mech2.mjs / run-mech3.mjs — the measurement harnesses (1–2 hit local Ollama; 3 is
+  deterministic).
 
 ## Links
 - Repository: https://github.com/sjgant80-hub/kar-foldcycle

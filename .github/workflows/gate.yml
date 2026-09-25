@@ -25,6 +25,12 @@ jobs:
             --timeout 60000 --cap 900 --baseline capacitypool.baseline.json \
             --test node --test capacitypool.test.mjs
 
+      - name: witness — mechanism 3 kernel must be CLEAN
+        run: |
+          node /tmp/witness/witness.mjs mutate balancer.mjs \
+            --timeout 60000 --cap 900 --baseline balancer.baseline.json \
+            --test node --test balancer.test.mjs
+
       - name: the live page still carries the gated kernels + recorded data
         run: |
           cp index.html /tmp/shipped.html

@@ -1,0 +1,7 @@
+[
+  {
+    "mutation": "> → >=",
+    "snippet": "if (sinceRegret % decayEvery === 0 && cap > minCap) cap = Math.max(minCap, cap - 1);",
+    "reason": "floor-equivalent: the assignment is Math.max(minCap, cap - 1), so when cap === minCap the mutant (cap >= minCap) enters the branch but computes Math.max(minCap, minCap - 1) === minCap — no change — identical to the original (cap > minCap) which skips. When cap > minCap both behave identically. No input distinguishes them; the mutant cannot change any output."
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "what": "fold-cycle mechanism 3 — the balance condition: an adaptive pool that self-tunes retention to a shifting working set, vs fixed caps. Deterministic pool-policy simulation.",
+  "metric": "hit-rate (each hit = one real embedding call avoided, ~44ms per mechanism 2) AND average memory held, over a trace whose working set shifts 10 → 45 → 10.",
+  "trace": {
+    "folds": 360,
+    "phases": "10 → 45 → 10"
+  },
+  "arms": {
+    "fixedSmall": {
+      "hitRate": 0.5667,
+      "avgMem": 13.66,
+      "avgCap": 15,
+      "cap": 15,
+      "regret": 56,
+      "hits": 204,
+      "misses": 156
+    },
+    "fixedLarge": {
+      "hitRate": 0.8194,
+      "avgMem": 37.43,
+      "avgCap": 50,
+      "cap": 50,
+      "regret": 0,
+      "hits": 295,
+      "misses": 65
+    },
+    "adaptive": {
+      "hitRate": 0.7889,
+      "avgMem": 33.19,
+      "avgCap": 42.75,
+      "cap": 60,
+      "regret": 11,
+      "hits": 284,
+      "misses": 76
+    }
+  },
+  "verdict": {
+    "verdict": "LEARN",
+    "why": "the balancer matched hit-rate but saved only 11% memory — not enough to earn the tuning over a plain fixed cap",
+    "adaptiveHitRate": 0.7888888888888889,
+    "largeHitRate": 0.8194444444444444,
+    "hitGapPt": 3,
+    "adaptiveAvgMem": 33.18611111111111,
+    "largeAvgMem": 37.43333333333333,
+    "memSavedPct": 11,
+    "tolPct": 3,
+    "smallHitRate": 0.5666666666666667,
+    "smallAvgMem": 13.66388888888889
+  },
+  "honest": "A pool-policy question, so measured deterministically (no model calls). Kar predicted LEARN: a fixed cap sized to the peak working set is often as good; the balancer earns its keep only if it holds the large cap hit-rate at much less memory. κ is the private lens, not the claim."
+}
