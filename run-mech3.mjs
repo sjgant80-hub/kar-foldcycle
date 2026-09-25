@@ -49,7 +49,7 @@ const results = {
   trace: { folds: trace.length, phases: '10 → 45 → 10' },
   arms: { fixedSmall: round(fixedSmall), fixedLarge: round(fixedLarge), adaptive: round(adaptive) },
   verdict,
-  honest: 'A pool-policy question, so measured deterministically (no model calls). Kar predicted LEARN: a fixed cap sized to the peak working set is often as good; the balancer earns its keep only if it holds the large cap hit-rate at much less memory. κ is the private lens, not the claim.',
+  honest: 'A pool-policy question, so measured deterministically (no model calls). Kar predicted LEARN: a fixed cap sized to the peak working set is often as good; the balancer earns its keep only if it holds the large cap hit-rate at much less memory.',
 };
 writeFileSync(new URL('./results-mech3.json', import.meta.url), JSON.stringify(results, null, 2));
 console.log(`\n${verdict.verdict}: ${verdict.why}`);

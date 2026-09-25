@@ -54,7 +54,7 @@ const results = {
   samples: { cold, warm, control },
   perTrial: trials,
   verdict,
-  honest: 'Prefix caching is the PROVEN seed (Ollama does it by default) — this quantifies the magnitude on this metal, it does not invent the mechanism. Mechanisms 2 (capacity-pooling) and 3 (κ-balance) are unbuilt.',
+  honest: 'Prefix caching is the PROVEN seed (Ollama does it by default) — this quantifies the magnitude on this metal, it does not invent the mechanism.',
 };
 writeFileSync(new URL('./results.json', import.meta.url), JSON.stringify(results, null, 2));
 console.log(`\n${verdict.verdict}: ${verdict.why}`);

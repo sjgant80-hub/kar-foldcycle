@@ -9,7 +9,7 @@
 // Honest going in (Kar's own prediction): this likely LEARNs — a fixed cap sized to the peak working set is
 // often just as good; the balancer only earns its keep when the working set SHIFTS enough that no single
 // fixed cap is both big-enough-when-large and lean-when-small. The eval measures exactly that: hit-rate AND
-// average memory held, adaptive vs fixed, under a shifting working set. κ is the private lens, not the claim.
+// average memory held, adaptive vs fixed, under a shifting working set.
 
 export function createBalancedPool(opts) {
   const o = (opts && typeof opts === 'object') ? opts : {};

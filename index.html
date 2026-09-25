@@ -295,7 +295,7 @@ function poolVerdict(input) {
 // Honest going in (Kar's own prediction): this likely LEARNs — a fixed cap sized to the peak working set is
 // often just as good; the balancer only earns its keep when the working set SHIFTS enough that no single
 // fixed cap is both big-enough-when-large and lean-when-small. The eval measures exactly that: hit-rate AND
-// average memory held, adaptive vs fixed, under a shifting working set. κ is the private lens, not the claim.
+// average memory held, adaptive vs fixed, under a shifting working set.
 
 function createBalancedPool(opts) {
   const o = (opts && typeof opts === 'object') ? opts : {};
@@ -453,7 +453,7 @@ const R1 = {
     "controlSavingPct": 0,
     "controlHolds": true
   },
-  "honest": "Prefix caching is the PROVEN seed (Ollama does it by default) — this quantifies the magnitude on this metal, it does not invent the mechanism. Mechanisms 2 (capacity-pooling) and 3 (κ-balance) are unbuilt."
+  "honest": "Prefix caching is the PROVEN seed (Ollama does it by default) — this quantifies the magnitude on this metal, it does not invent the mechanism."
 }, R2 = {
   "what": "fold-cycle mechanism 2 — capacity-pooling: release an expired fold's embedding to a pool, reuse it when content recurs, instead of recomputing. Measures embedding calls avoided + time saved on a recurring workload.",
   "metric": "real embedding-model calls (nomic-embed-text) avoided, and their wall time — the recycled computation is a genuine model forward pass.",
@@ -557,7 +557,7 @@ const R1 = {
     "smallHitRate": 0.5666666666666667,
     "smallAvgMem": 13.66388888888889
   },
-  "honest": "A pool-policy question, so measured deterministically (no model calls). Kar predicted LEARN: a fixed cap sized to the peak working set is often as good; the balancer earns its keep only if it holds the large cap hit-rate at much less memory. κ is the private lens, not the claim."
+  "honest": "A pool-policy question, so measured deterministically (no model calls). Kar predicted LEARN: a fixed cap sized to the peak working set is often as good; the balancer earns its keep only if it holds the large cap hit-rate at much less memory."
 };
 const ms = (n) => n == null ? '—' : Math.round(n).toLocaleString() + 'ms';
 function paint(id, verdict, headline, sub) {
